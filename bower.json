@@ -1,0 +1,21 @@
+{
+  "name": "GRÄGRÄ-proj",
+  "version": "0.0.0",
+  "main": "index.html",
+  "authors": [
+    "rehn.michael@outlook.com"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fontawesome": "~4.3.0",
+    "rxjs": "~2.5.2"
+  }
+}
