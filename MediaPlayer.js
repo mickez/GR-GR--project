@@ -3,22 +3,44 @@
 
 function MediaPlayer() {
 	this.audio = new Audio();
-	this.current = undefined;
+	this.audio.addEventListener('ended', this._onEnded.bind(this));
+
+	this.currentData = undefined;
+	this.currentFile = undefined;
+	this.currentTag = undefined;
+
+	this.onLoad = new signals.Signal();
+	this.onPlay = new signals.Signal();
+	this.onPause = new signals.Signal();
+	this.onEnded = new signals.Signal();
 }
 
-self.MediaPlayer = MediaPlayer;
+window.MediaPlayer = MediaPlayer;
 MediaPlayer.prototype.constructor = MediaPlayer;
 
 MediaPlayer.prototype.load = function(file) {
+	this.currentFile = file;
 	var reader = new FileReader();
 	reader.onload = function(e) {
-		this.current = e.target.result;
+		this.currentData = e.target.result;
 
-		this.audio.src = this.current;
+		this.audio.src = this.currentData;
 		this.play();
 	}.bind(this);
 
 	reader.readAsDataURL(file);
+
+	ID3.loadTags(file.name, function() {
+	    this.currentTag = ID3.getAllTags(file.name);
+	    this.onLoad.dispatch(this.currentTag);
+	}.bind(this), {
+	    dataReader: FileAPIReader(this.currentFile),
+	    tags: ['title', 'artist', 'album', 'track', 'picture']
+	});
+};
+
+MediaPlayer.prototype._onEnded = function() {
+	this.onEnded.dispatch();
 };
 
 MediaPlayer.prototype.togglePause = function() {
@@ -37,12 +59,14 @@ MediaPlayer.prototype.togglePause = function() {
 MediaPlayer.prototype.play = function() {
 	if (this.audio) {
 		this.audio.play();
+		this.onPlay.dispatch();
 	}
 };
 
 MediaPlayer.prototype.pause = function() {
 	if (this.audio) {
 		this.audio.pause();
+		this.onPause.dispatch();
 	}
 };
 

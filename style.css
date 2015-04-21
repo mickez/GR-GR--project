@@ -3,6 +3,7 @@ html, body {
 	background-color: #000;
 	padding: 0;
 	margin: 0;
+	font-family: 'Lora', serif;
 }
 
 html {
@@ -10,7 +11,7 @@ html {
 }
 
 body {
-	background-image: url("images/background.jpg");
+	/*background-image: url("images/background.jpg");*/
 	-webkit-background-size: cover;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -19,16 +20,61 @@ body {
 	/*opacity: 0.70;*/
 }
 
-.player {
+h3 {
+	font-size: 0.4rem;
+}
+
+h4 {
+	font-size: 0.3rem;
+}
+
+.bg {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	opacity: 0.4;
+
+	background-position: center;
+	-webkit-background-size: cover;
+	background-size: cover;
+}
+
+.diskContainer {
 	width: 60vmin;
 	height: 60vmin;
 
+	background-position: center;
+	-webkit-background-size: cover;
+	background-size: cover;
+
+	padding: 30px;
+}
+
+.player {
+	display: inline-block;
+
 	position: relative;
-	top: 20%;
+	top: 10%;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+	-o-transform: translateX(-50%);
+	transform: translateX(-50%);
 
 	margin: auto;
 
-	/*border: 1px black solid;*/
+	border-radius: 5px;
+
+	-webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+
+	background-color: rgba(0, 0, 0, 0.75);
+}
+
+.trackInfo {
+	text-align: center;
+	color: #fff;
 }
 
 .player .disk {
@@ -43,7 +89,18 @@ body {
 	box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
 }
 
+.player .disk:hover .pausePlay {
+	-webkit-transform: scale(1.1);
+	-ms-transform: scale(1.1);
+	-o-transform: scale(1.1);
+	transform: scale(1.1);
+}
+
 .player .disk .pausePlay {
+	-webkit-transition: transform 0.2s;
+	-o-transition: transform 0.2s;
+	transition: transform 0.2s;
+
 	background-color: #dd5e00;
 	height: 33.32%; /* 100% / 3 */
 	width: 33.32%; /* 100% / 3 */

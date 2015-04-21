@@ -9,19 +9,29 @@
 	<link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css">
 
 	<script src="bower_components/rxjs/dist/rx.all.js"></script>
+	<script src="bower_components/js-signals/dist/signals.min.js"></script>
+	<script src="id3.js"></script>
 
 </head>
 <body>
 
-<div class="player">
-	<div class="disk">
-		
-		<div class="pausePlay" id="pauseBtn">
-						
-			<i class="fa fa-folder-open pausePlayIcon"></i>
-			
+<div class="bg"></div>
 
+<div class="player">
+	<div class="diskContainer">
+		<div class="disk">
+			
+			<div class="pausePlay" id="pauseBtn">
+							
+				<i class="fa fa-folder-open pausePlayIcon"></i>
+		
+			</div>
 		</div>
+	</div>
+
+	<div class="trackInfo">
+		<h3 class="title">title</h3>
+		<h4 class="artist">artist</h4>
 	</div>
 </div>
 
@@ -30,4 +40,6 @@
 
 <script src="MediaPlayer.js"></script>
 <script src="main.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Lora&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
 </html>

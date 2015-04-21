@@ -2,10 +2,21 @@
 'use strict';
 
 var mediaPlayer = new MediaPlayer();
+mediaPlayer.onLoad.add(onLoad);
+mediaPlayer.onEnded.add(function() {
+	setPausePlayIcon();
+});
 
 var $ = document.querySelector.bind(document);
+
 var pauseBtn = $('.pausePlay');
 var pausePlayIcon = $('.pausePlayIcon');
+var bg = $('.bg');
+
+var artist = $('.artist');
+var title = $('.title');
+var disk = $('.disk');
+var diskContainer = $('.diskContainer');
 
 function onFileDrop(event) {
 	event.stopPropagation();
@@ -13,9 +24,7 @@ function onFileDrop(event) {
 
 	var file = event.dataTransfer.files[0];
 
-	mediaPlayer.load(file);
-
-	setPausePlayIcon(false);
+	play(file);
 }
 
 function onDragOver(event) {
@@ -25,10 +34,37 @@ function onDragOver(event) {
 	event.dataTransfer.dropEffect = 'copy';
 }
 
+function onLoad(idTag) {
+	artist.innerHTML = idTag.artist;
+	title.innerHTML = idTag.title;
+
+	loadAlbumArt(idTag.picture);
+}
+
+function loadAlbumArt(image) {
+	var base64String = "";
+	for (var i = 0; i < image.data.length; i++) {
+	    base64String += String.fromCharCode(image.data[i]);
+	}
+	var dataUrl = "data:" + image.format + ";base64," + window.btoa(base64String);
+
+	diskContainer.style['background-image'] = 'url(\"' + dataUrl + '\")';
+	bg.style['background-image'] = 'url(\"' + dataUrl + '\")';
+
+}
+
+function play(file) {
+	mediaPlayer.load(file);
+	setPausePlayIcon(false);
+}
+
 function setPausePlayIcon(status) {
 	var className = pausePlayIcon.className;
-	var oldIcon = status ? 'fa-pause' : 'fa-play';
-	var newIcon = status ? 'fa-play' : 'fa-pause';
+	var newIcon = 'fa-folder-open';
+
+	if (status !== undefined) {
+		newIcon = status ? 'fa-play' : 'fa-pause';
+	} 
 	className = className.replace(/fa-pause|fa-play|fa-folder-open/g, newIcon);
 
 	pausePlayIcon.className = className;
@@ -49,9 +85,8 @@ Rx.Observable
 
 			input.addEventListener('change', function(event) {
 				var file = event.target.files[0];
-				mediaPlayer.load(file);
-				console.log(file);
-				setPausePlayIcon(false);
+
+				play(file);
 			});
 
 			input.click();
