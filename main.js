@@ -10,6 +10,8 @@ mediaPlayer.onEnded.add(function() {
 var $ = document.querySelector.bind(document);
 
 var pauseBtn = $('.pausePlay');
+var browseFileBtn = $('.browseFile');
+var muteBtn = $('.muteUnmute');
 var pausePlayIcon = $('.pausePlayIcon');
 var bg = $('.bg');
 
@@ -35,18 +37,22 @@ function onDragOver(event) {
 }
 
 function onLoad(idTag) {
-	artist.innerHTML = idTag.artist;
-	title.innerHTML = idTag.title;
+	artist.innerHTML = idTag.artist || 'Unkown Artist';
+	title.innerHTML = idTag.title || 'Unkown Track';
 
 	loadAlbumArt(idTag.picture);
 }
 
 function loadAlbumArt(image) {
-	var base64String = "";
-	for (var i = 0; i < image.data.length; i++) {
-	    base64String += String.fromCharCode(image.data[i]);
+	var dataUrl = 'images/bg.jpg';
+	
+	if (image) {
+		var base64String = "";
+		for (var i = 0; i < image.data.length; i++) {
+		    base64String += String.fromCharCode(image.data[i]);
+		}
+		dataUrl = "data:" + image.format + ";base64," + window.btoa(base64String);
 	}
-	var dataUrl = "data:" + image.format + ";base64," + window.btoa(base64String);
 
 	diskContainer.style['background-image'] = 'url(\"' + dataUrl + '\")';
 	bg.style['background-image'] = 'url(\"' + dataUrl + '\")';
@@ -70,6 +76,19 @@ function setPausePlayIcon(status) {
 	pausePlayIcon.className = className;
 }
 
+function browseFile() {
+	var input = document.createElement('input');
+	input.type = 'file';
+
+	input.addEventListener('change', function(event) {
+		var file = event.target.files[0];
+
+		play(file);
+	});
+
+	input.click();
+}
+
 document.body.addEventListener('dragover', onDragOver, false);
 document.body.addEventListener('drop', onFileDrop, false);
 
@@ -80,17 +99,19 @@ Rx.Observable
 			var result = mediaPlayer.togglePause();
 			setPausePlayIcon(result);
 		} else {
-			var input = document.createElement('input');
-			input.type = 'file';
-
-			input.addEventListener('change', function(event) {
-				var file = event.target.files[0];
-
-				play(file);
-			});
-
-			input.click();
+			browseFile();
 		}
+	});
+
+Rx.Observable
+	.fromEvent(browseFileBtn, 'click')
+	.forEach(browseFile);
+
+
+Rx.Observable
+	.fromEvent(muteBtn, 'click')
+	.forEach(function() {
+		mediaPlayer.muted = !mediaPlayer.muted;
 	});
 
 })();

@@ -72,7 +72,18 @@ MediaPlayer.prototype.pause = function() {
 
 Object.defineProperty(MediaPlayer.prototype, 'isLoaded', {
 	get: function() {
-		return this.audio && (this.audio.src !== '');
+		return this.audio && (this.audio.src !== '') && !this.audio.ended;
+	}
+});
+
+Object.defineProperty(MediaPlayer.prototype, 'muted', {
+	get: function() {
+		return this.audio ? this.audio.muted : undefined;
+	},
+	set: function(value) {
+		if (this.audio) {
+			this.audio.muted = value;
+		}
 	}
 });
 

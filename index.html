@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 
+	<meta name="viewport" content="width=device-width">
 
 	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css">
@@ -19,14 +20,26 @@
 
 <div class="player">
 	<div class="diskContainer">
+		<div class="scrub"></div>
+		<div class="volume"></div>
+
 		<div class="disk">
 			
 			<div class="pausePlay" id="pauseBtn">
-							
-				<i class="fa fa-folder-open pausePlayIcon"></i>
-		
+				<i class="fa fa-folder-open pausePlayIcon"></i>				
 			</div>
+				
+			<div class="muteUnmute">
+				<i class="fa fa-volume-off muteIcon"></i>
+			</div>
+				
+			<div class="browseFile">
+				<i class="fa fa-folder-open browseFileIcon"></i>
+			</div>
+
 		</div>
+
+
 	</div>
 
 	<div class="trackInfo">
