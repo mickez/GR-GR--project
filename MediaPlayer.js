@@ -19,7 +19,7 @@ MediaPlayer.prototype.load = function(file) {
 	}.bind(this);
 
 	reader.readAsDataURL(file);
-}
+};
 
 MediaPlayer.prototype.togglePause = function() {
 	if (this.audio) {
@@ -32,19 +32,19 @@ MediaPlayer.prototype.togglePause = function() {
 		return this.audio.paused;
 	}
 	return null;
-}
+};
 
 MediaPlayer.prototype.play = function() {
 	if (this.audio) {
 		this.audio.play();
 	}
-}
+};
 
 MediaPlayer.prototype.pause = function() {
 	if (this.audio) {
 		this.audio.pause();
 	}
-}
+};
 
 Object.defineProperty(MediaPlayer.prototype, 'isLoaded', {
 	get: function() {
