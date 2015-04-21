@@ -29,7 +29,7 @@ function setPausePlayIcon(status) {
 	var className = pausePlayIcon.className;
 	var oldIcon = status ? 'fa-pause' : 'fa-play';
 	var newIcon = status ? 'fa-play' : 'fa-pause';
-	className = className.replace(oldIcon, newIcon);
+	className = className.replace(/fa-pause|fa-play|fa-folder-open/g, newIcon);
 
 	pausePlayIcon.className = className;
 }
@@ -40,9 +40,22 @@ document.body.addEventListener('drop', onFileDrop, false);
 Rx.Observable
 	.fromEvent(pauseBtn, 'click')
 	.forEach(function() {
-		var result = mediaPlayer.togglePause();
+		if (mediaPlayer.isLoaded) {
+			var result = mediaPlayer.togglePause();
+			setPausePlayIcon(result);
+		} else {
+			var input = document.createElement('input');
+			input.type = 'file';
 
-		setPausePlayIcon(result);
+			input.addEventListener('change', function(event) {
+				var file = event.target.files[0];
+				mediaPlayer.load(file);
+				console.log(file);
+				setPausePlayIcon(false);
+			});
+
+			input.click();
+		}
 	});
 
 })();

@@ -46,4 +46,10 @@ MediaPlayer.prototype.pause = function() {
 	}
 }
 
+Object.defineProperty(MediaPlayer.prototype, 'isLoaded', {
+	get: function() {
+		return this.audio && (this.audio.src !== '');
+	}
+});
+
 })();
