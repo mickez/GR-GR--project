@@ -142,8 +142,10 @@ h4 {
 
 	position: absolute;
 
-	left: 5%;
+	left: 16.66%;
 	top: 50%;
+
+	transform: translate(-50%, -50%);
 
 	cursor: pointer;
 	border-radius: 50%;
@@ -167,9 +169,11 @@ h4 {
 
 	position: absolute;
 
-	right: 5%;
+	left: 84.44%;
 	top: 50%;
 
+	transform: translate(-50%, -50%);
+	
 	cursor: pointer;
 	border-radius: 50%;
 }
@@ -184,19 +188,56 @@ h4 {
 
 }
 
-.scrub, .volume {
+.bottomStrip {
 	position: absolute;
-	height: 7%;
-	width: 50%;
-	background-color: black;
+	padding: 0.3rem;
+	background-color: #000;
 
-	bottom: 0px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	font-size: 0.6rem;
+	color: #fff;
+
+	display: flex;
+	align-items: center;
 }
 
 .scrub {
-	left: 0;
+	width: 100%;
+	height: 0.6rem;
+
+	background-color: #dd9f72;
+
+	margin-left: 0.3rem;
+	margin-right: 0.3rem;
+
+	position: relative;
 }
 
-.volume {
-	right: 0;
+.nub {
+	position: absolute;
+
+	width: 0.6rem;
+	height: 0.6rem;
+	background-color: #fff;
+	display: inline-block;
+
+	top: 0;
+	left: 30%;
+
+	-webkit-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+	-o-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+.fill {
+	position: absolute;
+	height: 0.6rem;
+	width: 30%;
+
+	background-color: #dd5e00;
+
 }
