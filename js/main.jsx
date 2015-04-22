@@ -92,26 +92,41 @@ function browseFile() {
 document.body.addEventListener('dragover', onDragOver, false);
 document.body.addEventListener('drop', onFileDrop, false);
 
-Rx.Observable
-	.fromEvent(pauseBtn, 'click')
-	.forEach(function() {
-		if (mediaPlayer.isLoaded) {
-			var result = mediaPlayer.togglePause();
-			setPausePlayIcon(result);
-		} else {
-			browseFile();
-		}
-	});
+function onAction() {
+	if (mediaPlayer.isLoaded) {
+		var result = mediaPlayer.togglePause();
+		setPausePlayIcon(result);
+	} else {
+		browseFile();
+	}
+}
 
-Rx.Observable
-	.fromEvent(browseFileBtn, 'click')
-	.forEach(browseFile);
+function onMute() {
+	mediaPlayer.muted = !mediaPlayer.muted;
+}
 
+function onBrowse() {
+	browseFile();
+}
 
-Rx.Observable
-	.fromEvent(muteBtn, 'click')
-	.forEach(function() {
-		mediaPlayer.muted = !mediaPlayer.muted;
-	});
+function renderApp() {
+	var time = new Date(mediaPlayer.audio.currentTime * 1000);
+	var duration = new Date(mediaPlayer.audio.duration * 1000);
+	var icon = !mediaPlayer.currentFile || mediaPlayer.audio.ended ? undefined : mediaPlayer.audio.paused;
+
+	React.render((
+		<div>
+			<DiscComponent onAction={onAction} onMute={onMute} onBrowse={onBrowse} icon={icon} muted={mediaPlayer.muted || mediaPlayer.volume === 0}/>
+			<ScrubContainer time={time} duration={duration} />
+		</div>
+	), document.getElementById('diskContainer'));
+}
+
+renderApp();
+
+mediaPlayer.audio.addEventListener('volumechange', renderApp);
+mediaPlayer.audio.addEventListener('timeupdate', renderApp);
+mediaPlayer.audio.addEventListener('pause', renderApp);
+mediaPlayer.audio.addEventListener('playing', renderApp);
 
 })();
