@@ -2,7 +2,8 @@
 'use strict';
 
 var mediaPlayer = new MediaPlayer();
-var analyser = new Analyser(mediaPlayer, 1080, 500, 0.5);
+var analyser = new Analyser(mediaPlayer, 500, 500, 0.5);
+window.analyser = analyser;
 
 var $ = document.querySelector.bind(document);
 
@@ -119,7 +120,7 @@ document.body.addEventListener('drop', onFileDrop, false);
 
 renderApp();
 
-// diskContainer.insertBefore(analyser.canvas, document.getElementById('playerControls'));
-document.body.insertBefore(analyser.canvas, $('.bg'));
+diskContainer.insertBefore(analyser.canvas, document.getElementById('playerControls'));
+// document.body.insertBefore(analyser.canvas, $('.bg'));
 
 })();

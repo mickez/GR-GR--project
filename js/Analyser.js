@@ -14,6 +14,10 @@
 
         this.resolution = resolution;
 
+        this.amp = 1;
+
+        this.type = 0;
+
         this.canvas = document.createElement('canvas');
         this.canvas.className = 'visualiser';
         this.canvas.width = width;
@@ -45,6 +49,20 @@
         var ctx = this.canvasContext;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
+        switch (this.type) {
+            case 0:
+                this._circular(ctx);
+                break;
+            case 1:
+                this._linear(ctx);
+                break;
+            default:
+                this._linear(ctx);
+                break;
+        }
+    };
+
+    Analyser.prototype._linear = function(ctx) {
         var middleX = ctx.canvas.width / 2;
         var middleY = ctx.canvas.height / 2;
         var height, x, y;
@@ -52,10 +70,9 @@
         ctx.beginPath();
         ctx.moveTo(0, ctx.canvas.height);
 
-        var i;
-
-        var oldHeight;
-        for (i = this.frequencyData.length - 1; i >= 0; i -= (1 / this.resolution)) {
+        var oldHeight, i;
+        // Skip the 10 first as there will most likely be an ugly gap
+        for (i = this.frequencyData.length - 1; i >= 2; i -= (1 / this.resolution)) {
             height = (ctx.canvas.height / 255) * this.frequencyData[i];
             oldHeight = oldHeight || height;
             height = (height + oldHeight * 3) / 4;
@@ -68,7 +85,8 @@
             oldHeight = height;
         }
 
-        for (i = 0; i < this.frequencyData.length; i += (1 / this.resolution)) {
+        // Skip the 10 first as there will most likely be an ugly gap
+        for (i = 2; i < this.frequencyData.length; i += (1 / this.resolution)) {
             height = (ctx.canvas.height / 255) * this.frequencyData[i];
             oldHeight = oldHeight || height;
             height = (height + oldHeight * 3) / 4;
@@ -83,6 +101,55 @@
 
         ctx.lineTo(ctx.canvas.width, ctx.canvas.height);
         ctx.lineTo(0, ctx.canvas.height);
+        ctx.closePath();
+
+        ctx.fill();
+    };
+
+    Analyser.prototype._circular = function(ctx) {
+        var middleX = ctx.canvas.width / 2;
+        var middleY = ctx.canvas.height * 0.9;
+        var oldHeight, height, rotation = Math.PI / 2, step = (Math.PI) / this.frequencyData.length, i, x, y;
+
+
+        ctx.beginPath();
+        ctx.moveTo(0, ctx.canvas.height);
+
+        // Skip the 10 first as there will most likely be an ugly gap
+        for (i = this.frequencyData.length - 1; i >= 2; i--) {
+            height = (ctx.canvas.height / 255) * this.frequencyData[i] / 2;
+            oldHeight = oldHeight || height;
+            height = (height + oldHeight * 3) / 4;
+
+            y = (ctx.canvas.height - height);
+
+            if (i === this.frequencyData.length - 1) {
+                ctx.moveTo(middleX + Math.cos(rotation) * height * this.amp, middleY + Math.sin(rotation) * height * this.amp);
+            } else {
+                ctx.lineTo(middleX + Math.cos(rotation) * height * this.amp, middleY + Math.sin(rotation) * height * this.amp);
+            }
+
+            rotation += step;
+            oldHeight = height;
+        }
+        // Skip the 10 first as there will most likely be an ugly gap
+        for (i = 2; i < this.frequencyData.length; i++) {
+            height = (ctx.canvas.height / 255) * this.frequencyData[i] / 2;
+            oldHeight = oldHeight || height;
+            height = (height + oldHeight * 3) / 4;
+
+            y = (ctx.canvas.height - height);
+
+            if (i === 0) {
+                ctx.moveTo(middleX + Math.cos(rotation) * height * this.amp, middleY + Math.sin(rotation) * height * this.amp);
+            } else {
+                ctx.lineTo(middleX + Math.cos(rotation) * height * this.amp, middleY + Math.sin(rotation) * height * this.amp);
+            }
+
+            rotation += step;
+            oldHeight = height;
+        }
+
         ctx.closePath();
 
         ctx.fill();
