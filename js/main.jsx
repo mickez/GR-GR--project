@@ -31,6 +31,8 @@ function onLoad(idTag) {
 	artist.innerHTML = idTag.artist || 'Unkown Artist';
 	title.innerHTML = idTag.title || 'Unkown Track';
 
+	document.title = (idTag.title || 'Unkown Track') + ' - ' +(idTag.artist || 'Unkown Artist');
+
 	loadAlbumArt(idTag.picture);
 }
 
