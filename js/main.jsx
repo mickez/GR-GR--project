@@ -2,7 +2,7 @@
 'use strict';
 
 var mediaPlayer = new MediaPlayer();
-var analyser = new Analyser(mediaPlayer, 500, 500, 0.5);
+var analyser = new Analyser(mediaPlayer, 500, 500, 0.5, 75);
 window.analyser = analyser;
 
 var $ = document.querySelector.bind(document);

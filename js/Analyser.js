@@ -6,7 +6,7 @@
      * Initializes the analysert
      * @param {MediaPlayer} mediaPlayer An instance of a mediaPlayer
      */
-    function Analyser(mediaPlayer, width, height, resolution) {
+    function Analyser(mediaPlayer, width, height, resolution, radius) {
         // If AudioContext isnt support then this object isn't needed
         if (!AudioContext) { return; }
 
@@ -14,7 +14,7 @@
 
         this.resolution = resolution;
 
-        this.amp = 1;
+        this.radius = radius || 100;
 
         this.type = 0;
 
@@ -109,7 +109,7 @@
     Analyser.prototype._circular = function(ctx) {
         var middleX = ctx.canvas.width / 2;
         var middleY = ctx.canvas.height * 0.9;
-        var oldHeight, height, rotation = Math.PI / 2, step = (Math.PI) / this.frequencyData.length, i, x, y;
+        var oldHeight, height, rotation = Math.PI / 2, step = (Math.PI) / this.frequencyData.length, i, x, y, offsetX, offsetY;
 
 
         ctx.beginPath();
@@ -123,10 +123,13 @@
 
             y = (ctx.canvas.height - height);
 
+            offsetX = Math.cos(rotation) * this.radius;
+            offsetY = Math.sin(rotation) * this.radius;
+
             if (i === this.frequencyData.length - 1) {
-                ctx.moveTo(middleX + Math.cos(rotation) * height * this.amp, middleY + Math.sin(rotation) * height * this.amp);
+                ctx.moveTo(middleX + offsetX + Math.cos(rotation) * height, middleY + offsetY + Math.sin(rotation) * height);
             } else {
-                ctx.lineTo(middleX + Math.cos(rotation) * height * this.amp, middleY + Math.sin(rotation) * height * this.amp);
+                ctx.lineTo(middleX + offsetX + Math.cos(rotation) * height, middleY + offsetY + Math.sin(rotation) * height);
             }
 
             rotation += step;
@@ -140,10 +143,13 @@
 
             y = (ctx.canvas.height - height);
 
+            offsetX = Math.cos(rotation) * this.radius;
+            offsetY = Math.sin(rotation) * this.radius;
+
             if (i === 0) {
-                ctx.moveTo(middleX + Math.cos(rotation) * height * this.amp, middleY + Math.sin(rotation) * height * this.amp);
+                ctx.moveTo(middleX + offsetX + Math.cos(rotation) * height, middleY + offsetY + Math.sin(rotation) * height);
             } else {
-                ctx.lineTo(middleX + Math.cos(rotation) * height * this.amp, middleY + Math.sin(rotation) * height * this.amp);
+                ctx.lineTo(middleX + offsetX + Math.cos(rotation) * height, middleY + offsetY + Math.sin(rotation) * height);
             }
 
             rotation += step;
