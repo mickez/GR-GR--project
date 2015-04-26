@@ -60,6 +60,8 @@ h4 {
 }
 
 .trackInfo {
+	width: 60vmin;
+
 	text-align: center;
 	color: #fff;
 }
@@ -74,8 +76,6 @@ h4 {
 	background-size: cover;
 
 	position: relative;
-
-	padding: 30px;
 }
 
 .player .disk {
