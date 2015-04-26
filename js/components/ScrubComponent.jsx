@@ -32,6 +32,7 @@ var Scrub = React.createClass({
 
     _onMouseDown: function(event) {
         this.setState({scrubbing: true});
+        document.body.className += ' scrubbing';
         this._moveNub(event);
     },
 
@@ -57,6 +58,7 @@ var Scrub = React.createClass({
 
         this._onChange({value: this.state.value});
         this.setState({value: NaN, scrubbing: false});
+        document.body.className = document.body.className.replace(/scrubbing/g, '');
     },
 
     _onChange: function(props) {

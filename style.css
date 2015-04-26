@@ -17,6 +17,15 @@ body {
 	background-position: center;
 }
 
+body.scrubbing * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 h3 {
 	font-size: 1rem;
 }
@@ -30,6 +39,8 @@ h4 {
 	width: 100%;
 	height: 100%;
 	opacity: 0.4;
+	left: 0;
+	top: 0;
 
 	background-position: center;
 	-webkit-background-size: cover;
@@ -42,7 +53,7 @@ h4 {
 .player {
 	display: inline-block;
 
-	position: relative;
+	position: absolute;
 	top: 10%;
 	left: 50%;
 	-webkit-transform: translateX(-50%);
@@ -78,10 +89,11 @@ h4 {
 	position: relative;
 }
 
-.diskContainer .visualiser {
+.visualiser {
 	position: absolute;
 	width: 100%;
-	bottom: 1.3rem;
+	height: 75%;
+	bottom: 0;
 	z-index: 0;
 }
 
