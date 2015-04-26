@@ -16,8 +16,9 @@ var Scrub = React.createClass({
     },
 
     render: function() {
+        var value = !isNaN(this.state.value) ? this.state.value * 100 : (this.props.value * 100 || '0')
         var nubStyle = {
-            left: (((this.state.value || this.props.value) * 100) || '0') + '%'
+            left: value + '%'
         };
         var fillStyle = {
             width: nubStyle.left
