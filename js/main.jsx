@@ -54,16 +54,15 @@ function play(file) {
 	mediaPlayer.load(file);
 }
 
+var input = document.createElement('input');
+input.type = 'file';
+input.addEventListener('change', function(event) {
+	var file = event.target.files[0];
+
+	play(file);
+});
 function browseFile() {
-	var input = document.createElement('input');
-	input.type = 'file';
-
-	input.addEventListener('change', function(event) {
-		var file = event.target.files[0];
-
-		play(file);
-	});
-
+	input.value = '';
 	input.click();
 }
 
