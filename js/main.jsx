@@ -109,6 +109,11 @@ function onBrowse() {
 	browseFile();
 }
 
+function onScrubChange(props) {
+	mediaPlayer.audio.currentTime = mediaPlayer.audio.duration * props.value;
+	renderApp();
+}
+
 function renderApp() {
 	var time = new Date(mediaPlayer.audio.currentTime * 1000);
 	var duration = new Date(mediaPlayer.audio.duration * 1000);
@@ -117,7 +122,7 @@ function renderApp() {
 	React.render((
 		<div>
 			<DiscComponent onAction={onAction} onMute={onMute} onBrowse={onBrowse} icon={icon} muted={mediaPlayer.muted || mediaPlayer.volume === 0}/>
-			<ScrubContainer time={time} duration={duration} />
+			<ScrubContainer time={time} duration={duration} onChange={onScrubChange} />
 		</div>
 	), document.getElementById('diskContainer'));
 }

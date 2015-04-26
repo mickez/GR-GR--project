@@ -1,21 +1,66 @@
 var Scrub = React.createClass({
+    getInitialState: function () {
+        return {
+            value: NaN
+        };
+    },
+
+    componentDidMount: function () {
+        window.addEventListener('mousemove', this._onMouseMove);  
+        window.addEventListener('mouseup', this._onMouseUp);  
+    },
+
+    componentWillUnmount: function () {
+        window.removeEventListener('mousemove', this._onMouseMove);  
+        window.removeEventListener('mouseup', this._onMouseUp);  
+    },
+
     render: function() {
         var nubStyle = {
-            left: ((this.props.value * 100) || '0') + '%'
+            left: (((this.state.value || this.props.value) * 100) || '0') + '%'
         };
         var fillStyle = {
-            width: ((this.props.value * 100) || '0') + '%'
+            width: nubStyle.left
         };
         return (
-            <div className="scrub">
+            <div className="scrub" onMouseDown={this._onMouseDown}>
                 <div className="fill" style={fillStyle}></div>
                 <div className="nub" style={nubStyle}></div>
             </div>
         );
     },
 
-    _onChange: function() {
-        this.props._onChange();
+    _onMouseDown: function(event) {
+        this.setState({scrubbing: true});
+        this._moveNub(event);
+    },
+
+    _onMouseMove: function(event) {
+        if (!this.state.scrubbing) return;
+
+        this._moveNub(event);
+    },
+
+    _moveNub: function(event) {
+        var node = this.getDOMNode();
+
+        var mouseMoveX = event.pageX - node.getBoundingClientRect().left
+        var value = Math.min(Math.max(mouseMoveX / node.clientWidth, 0), 1);
+
+        this.setState({
+            value: value
+        });        
+    },
+
+    _onMouseUp: function(event) {
+        if (!this.state.scrubbing) return;
+
+        this._onChange({value: this.state.value});
+        this.setState({value: NaN, scrubbing: false});
+    },
+
+    _onChange: function(props) {
+        this.props.onChange(props);
     }
 });
 
@@ -45,10 +90,14 @@ var ScrubContainer = React.createClass({
             <div className="bottomStrip">
                 <TimeStamp date={this.props.time} />
 
-                <Scrub value={this.props.time.getTime() / this.props.duration.getTime()} />
+                <Scrub value={this.props.time.getTime() / this.props.duration.getTime()} onChange={this._onChange} />
 
                 <TimeStamp date={this.props.duration} />
             </div>
         );
+    },
+
+    _onChange: function(props) {
+        this.props.onChange(props);
     }
 });
