@@ -10,7 +10,7 @@ function MediaPlayer() {
 	this.currentFile = undefined;
 	this.currentTag = undefined;
 
-	this.audioCtx = new AudioContext();
+	this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 	this.audioSrc = this.audioCtx.createMediaElementSource(this.audio);
 	this.analyser = this.audioCtx.createAnalyser();
 
