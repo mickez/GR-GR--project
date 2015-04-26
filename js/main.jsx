@@ -9,15 +9,10 @@ mediaPlayer.onEnded.add(function() {
 
 var $ = document.querySelector.bind(document);
 
-var pauseBtn = $('.pausePlay');
-var browseFileBtn = $('.browseFile');
-var muteBtn = $('.muteUnmute');
-var pausePlayIcon = $('.pausePlayIcon');
 var bg = $('.bg');
 
 var artist = $('.artist');
 var title = $('.title');
-var disk = $('.disk');
 var diskContainer = $('.diskContainer');
 
 function onFileDrop(event) {
@@ -61,19 +56,6 @@ function loadAlbumArt(image) {
 
 function play(file) {
 	mediaPlayer.load(file);
-	setPausePlayIcon(false);
-}
-
-function setPausePlayIcon(status) {
-	var className = pausePlayIcon.className;
-	var newIcon = 'fa-folder-open';
-
-	if (status !== undefined) {
-		newIcon = status ? 'fa-play' : 'fa-pause';
-	} 
-	className = className.replace(/fa-pause|fa-play|fa-folder-open/g, newIcon);
-
-	pausePlayIcon.className = className;
 }
 
 function browseFile() {
@@ -89,13 +71,10 @@ function browseFile() {
 	input.click();
 }
 
-document.body.addEventListener('dragover', onDragOver, false);
-document.body.addEventListener('drop', onFileDrop, false);
 
 function onAction() {
 	if (mediaPlayer.isLoaded) {
 		var result = mediaPlayer.togglePause();
-		setPausePlayIcon(result);
 	} else {
 		browseFile();
 	}
@@ -133,5 +112,8 @@ mediaPlayer.audio.addEventListener('volumechange', renderApp);
 mediaPlayer.audio.addEventListener('timeupdate', renderApp);
 mediaPlayer.audio.addEventListener('pause', renderApp);
 mediaPlayer.audio.addEventListener('playing', renderApp);
+
+document.body.addEventListener('dragover', onDragOver, false);
+document.body.addEventListener('drop', onFileDrop, false);
 
 })();
