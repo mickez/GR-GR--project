@@ -1,3 +1,4 @@
+/* global AudioContext:false, signals:false, ID3:false, FileAPIReader:false */
 (function() {
 'use strict';
 
@@ -8,6 +9,13 @@ function MediaPlayer() {
 	this.currentData = undefined;
 	this.currentFile = undefined;
 	this.currentTag = undefined;
+
+	this.audioCtx = new AudioContext();
+	this.audioSrc = this.audioCtx.createMediaElementSource(this.audio);
+	this.analyser = this.audioCtx.createAnalyser();
+
+	this.audioSrc.connect(this.analyser);
+	this.analyser.connect(this.audioCtx.destination);
 
 	this.onLoad = new signals.Signal();
 	this.onPlay = new signals.Signal();
@@ -25,6 +33,7 @@ MediaPlayer.prototype.load = function(file) {
 		this.currentData = e.target.result;
 
 		this.audio.src = this.currentData;
+
 		this.play();
 	}.bind(this);
 

@@ -78,6 +78,13 @@ h4 {
 	position: relative;
 }
 
+.diskContainer .visualiser {
+	position: absolute;
+	width: 100%;
+	bottom: 1.3rem;
+	z-index: 0;
+}
+
 .player .disk {
 	position: absolute;
 

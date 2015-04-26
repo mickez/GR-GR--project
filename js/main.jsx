@@ -2,15 +2,11 @@
 'use strict';
 
 var mediaPlayer = new MediaPlayer();
-mediaPlayer.onLoad.add(onLoad);
-mediaPlayer.onEnded.add(function() {
-	setPausePlayIcon();
-});
+var analyser = new Analyser(mediaPlayer, 512, 320, 0.5);
 
 var $ = document.querySelector.bind(document);
 
 var bg = $('.bg');
-
 var artist = $('.artist');
 var title = $('.title');
 var diskContainer = $('.diskContainer');
@@ -71,7 +67,6 @@ function browseFile() {
 	input.click();
 }
 
-
 function onAction() {
 	if (mediaPlayer.isLoaded) {
 		var result = mediaPlayer.togglePause();
@@ -103,11 +98,16 @@ function renderApp() {
 			<DiscComponent onAction={onAction} onMute={onMute} onBrowse={onBrowse} icon={icon} muted={mediaPlayer.muted || mediaPlayer.volume === 0}/>
 			<ScrubContainer time={time} duration={duration} onChange={onScrubChange} />
 		</div>
-	), document.getElementById('diskContainer'));
+	), document.getElementById('playerControls'));
 }
 
-renderApp();
+function renderFrame() {
+	requestAnimationFrame(renderFrame);
 
+	mediaPlayer.analyser.getByteFrequencyData()
+}
+
+mediaPlayer.onLoad.add(onLoad);
 mediaPlayer.audio.addEventListener('volumechange', renderApp);
 mediaPlayer.audio.addEventListener('timeupdate', renderApp);
 mediaPlayer.audio.addEventListener('pause', renderApp);
@@ -115,5 +115,9 @@ mediaPlayer.audio.addEventListener('playing', renderApp);
 
 document.body.addEventListener('dragover', onDragOver, false);
 document.body.addEventListener('drop', onFileDrop, false);
+
+renderApp();
+
+diskContainer.insertBefore(analyser.canvas, document.getElementById('playerControls'));
 
 })();
