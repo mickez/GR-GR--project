@@ -1,7 +1,16 @@
 var DiscComponent = React.createClass({
+
+    componentDidMount: function () {
+        window.addEventListener('keyup', this._onKeyUp);
+    },
+
+    componentWillUnmount: function () {
+        window.removeEventListener('keyup', this._onKeyUp);
+    },
+
     render: function() {
         var actionClass = 'fa pausePlayIcon ' + this.getIconClass(this.props.icon);
-        var mutedClass = 'fa muteIcon ' + (this.props.muted ? 'fa-volume-off' : 'fa-volume-up')
+        var mutedClass = 'fa muteIcon ' + (this.props.muted ? 'fa-volume-off' : 'fa-volume-up');
 
         return (
             <div className="disk">
@@ -20,6 +29,13 @@ var DiscComponent = React.createClass({
 
             </div>
         );
+    },
+
+    _onKeyUp: function(event) {
+        // If key pressed is space-key
+        if (event.keyCode === 32) {
+            this._action();
+        }
     },
 
     getIconClass: function(value) {
