@@ -17,6 +17,7 @@
   "dependencies": {
     "fontawesome": "~4.3.0",
     "rxjs": "~2.5.2",
-    "js-signals": "~1.0.0"
+    "js-signals": "~1.0.0",
+    "react": "~0.13.2"
   }
 }
