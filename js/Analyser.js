@@ -56,6 +56,9 @@
             case 1:
                 this._linear(ctx);
                 break;
+            case 2:
+                this._beat(ctx);
+                break;
             default:
                 this._linear(ctx);
                 break;
@@ -160,6 +163,23 @@
 
         ctx.fill();
 
+    };
+
+    Analyser.prototype._beat = function(ctx) {
+        var middleX = ctx.canvas.width / 2;
+        var middleY = ctx.canvas.height / 2;
+
+        var radius = 0;
+        for (var i = 0; i < this.frequencyData.length; i++) {
+            radius += this.frequencyData[i];
+        }
+        radius /= this.frequencyData.length;
+
+        ctx.beginPath();
+        // Draw a circle
+        ctx.arc(middleX, middleY, radius, 0, Math.PI*2, true); 
+        ctx.closePath();
+        ctx.fill();
     };
 
 })();
