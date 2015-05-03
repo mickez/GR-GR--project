@@ -34,7 +34,22 @@ function onLoad(idTag) {
 
 	document.title = (idTag.title || 'Unkown Track') + ' - ' +(idTag.artist || 'Unkown Artist');
 
-	loadAlbumArt(idTag.picture);
+	if (idTag.picture) {
+		loadAlbumArt(idTag.picture);
+	} else if (idTag.album) {
+		qwest
+			.get('https://api.spotify.com/v1/search?q=' + [idTag.album, idTag.artist].join(' ') + '&type=album')
+			.then(function(res) {
+				console.log(res)
+				if (res.albums.items.length > 0) {
+					diskContainer.style['background-image'] = 'url(' + res.albums.items[0].images[0].url + ')';
+					bg.style['background-image'] = 'url(' + res.albums.items[0].images[0].url + ')';
+				} else {
+					loadAlbumArt();
+				}
+			});
+	}
+
 }
 
 function loadAlbumArt(image) {
@@ -121,6 +136,5 @@ document.body.addEventListener('drop', onFileDrop, false);
 renderApp();
 
 diskContainer.insertBefore(analyser.canvas, document.getElementById('playerControls'));
-// document.body.insertBefore(analyser.canvas, $('.bg'));
 
 })();
