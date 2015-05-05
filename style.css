@@ -17,6 +17,11 @@ body {
 	background-position: center;
 }
 
+.pickfile {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
 body.scrubbing * {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

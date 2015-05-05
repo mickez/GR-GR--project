@@ -137,4 +137,12 @@ renderApp();
 
 diskContainer.insertBefore(analyser.canvas, document.getElementById('playerControls'));
 
+function titleClick(event) {
+	event.target.removeEventListener('click', titleClick);
+	event.target.className = event.target.className.replace('pickfile', '');
+	browseFile();
+}
+
+title.addEventListener('click', titleClick);
+
 })();
