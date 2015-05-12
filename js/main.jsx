@@ -66,6 +66,13 @@ function loadAlbumArt(image) {
 	diskContainer.style['background-image'] = 'url(\"' + dataUrl + '\")';
 	bg.style['background-image'] = 'url(\"' + dataUrl + '\")';
 
+
+	var link = document.createElement('link');
+	link.type = 'image/x-icon';
+	link.rel = 'shortcut icon';
+	link.href = dataUrl;
+	document.getElementsByTagName('head')[0].appendChild(link);
+
 }
 
 function play(file) {
