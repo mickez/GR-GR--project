@@ -138,11 +138,25 @@ function renderFrame() {
 	mediaPlayer.analyser.getByteFrequencyData()
 }
 
+function setBodyClass() {
+	if (mediaPlayer.audio.paused) {
+		document.body.className = document.body.className.replace('playing', '');
+	} else {
+		document.body.className = 'playing';
+	}
+
+}
+
 mediaPlayer.onLoad.add(onLoad);
 mediaPlayer.audio.addEventListener('volumechange', renderApp);
 mediaPlayer.audio.addEventListener('timeupdate', renderApp);
 mediaPlayer.audio.addEventListener('pause', renderApp);
 mediaPlayer.audio.addEventListener('playing', renderApp);
+
+mediaPlayer.audio.addEventListener('pause', setBodyClass);
+mediaPlayer.audio.addEventListener('playing', setBodyClass);
+mediaPlayer.audio.addEventListener('ended', setBodyClass);
+
 
 document.body.addEventListener('dragover', onDragOver, false);
 document.body.addEventListener('drop', onFileDrop, false);

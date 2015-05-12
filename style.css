@@ -47,14 +47,14 @@ h4 {
 	left: 0;
 	top: 0;
 
-	-webkit-filter: blur(20px);
-	filter: blur(20px);
-
 	background-position: center;
 	-webkit-background-size: cover;
 	background-size: cover;
 
 	background-image: url('images/bg.jpg');
+
+	-webkit-filter: blur(8px);
+	filter: blur(8px);
 }
 
 
