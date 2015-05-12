@@ -77,6 +77,11 @@ input.type = 'file';
 input.addEventListener('change', function(event) {
 	var file = event.target.files[0];
 
+
+	// Remove the click on title
+	title.removeEventListener('click', titleClick);
+	title.className = title.className.replace('pickfile', '');
+
 	play(file);
 });
 function browseFile() {
@@ -138,8 +143,6 @@ renderApp();
 diskContainer.insertBefore(analyser.canvas, document.getElementById('playerControls'));
 
 function titleClick(event) {
-	event.target.removeEventListener('click', titleClick);
-	event.target.className = event.target.className.replace('pickfile', '');
 	browseFile();
 }
 
