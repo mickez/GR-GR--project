@@ -12,6 +12,8 @@ var artist = $('.artist');
 var title = $('.title');
 var diskContainer = $('.diskContainer');
 
+var albumArtCache = {};
+
 function onFileDrop(event) {
 	event.stopPropagation();
 	event.preventDefault();
@@ -36,14 +38,15 @@ function onLoad(idTag) {
 
 	if (idTag.picture) {
 		loadAlbumArt(idTag.picture);
-	} else if (idTag.album) {
-		console.log('dwjakd');
+	} else if (idTag.album && albumArtCache[idTag.album]) {
+		setAlbumArt(albumArtCache[idTag.album]);
+ 	} else if (idTag) {
 		qwest
 			.get('https://api.spotify.com/v1/search?q=' + [idTag.album, idTag.artist].join(' ') + '&type=album')
 			.then(function(res) {
 				if (res.albums.items.length > 0) {
-					diskContainer.style['background-image'] = 'url(' + res.albums.items[0].images[0].url + ')';
-					bg.style['background-image'] = 'url(' + res.albums.items[0].images[0].url + ')';
+					albumArtCache[idTag.album] = res.albums.items[0].images[0].url;
+					setAlbumArt(res.albums.items[0].images[0].url);
 				} else {
 					loadAlbumArt();
 				}
@@ -65,14 +68,19 @@ function loadAlbumArt(image) {
 		dataUrl = "data:" + image.format + ";base64," + window.btoa(base64String);
 	}
 
-	diskContainer.style['background-image'] = 'url(\"' + dataUrl + '\")';
-	bg.style['background-image'] = 'url(\"' + dataUrl + '\")';
+	setAlbumArt(dataUrl);
+}
+
+function setAlbumArt(url) {
+
+	diskContainer.style['background-image'] = 'url(\"' + url + '\")';
+	bg.style['background-image'] = 'url(\"' + url + '\")';
 
 
 	var link = document.createElement('link');
 	link.type = 'image/x-icon';
 	link.rel = 'shortcut icon';
-	link.href = dataUrl;
+	link.href = url;
 	document.getElementsByTagName('head')[0].appendChild(link);
 
 }
