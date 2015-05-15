@@ -13,6 +13,7 @@ var title = $('.title');
 var diskContainer = $('.diskContainer');
 
 var albumArtCache = {};
+var currentAlbumArt = 'images/bg.jpg';
 
 function onFileDrop(event) {
 	event.stopPropagation();
@@ -36,11 +37,18 @@ function onLoad(idTag) {
 
 	document.title = (idTag.title || 'Unkown Track') + ' - ' +(idTag.artist || 'Unkown Artist');
 
-	if (idTag.picture) {
-		loadAlbumArt(idTag.picture);
-	} else if (idTag.album && albumArtCache[idTag.album]) {
+	if (idTag.album && albumArtCache[idTag.album]) {
 		setAlbumArt(albumArtCache[idTag.album]);
- 	} else if (idTag) {
+	} else if (idTag.picture) {
+		var albumArt = getAlbumArt(idTag.picture);
+
+		if (idTag.album) {
+			albumArtCache[idTag.album] = albumArt;
+		}
+
+		setAlbumArt(albumArt);
+
+	} else if (idTag) {
 		qwest
 			.get('https://api.spotify.com/v1/search?q=' + [idTag.album, idTag.artist].join(' ') + '&type=album')
 			.then(function(res) {
@@ -48,16 +56,16 @@ function onLoad(idTag) {
 					albumArtCache[idTag.album] = res.albums.items[0].images[0].url;
 					setAlbumArt(res.albums.items[0].images[0].url);
 				} else {
-					loadAlbumArt();
+					loadAlbumArt(getAlbumArt());
 				}
 			});
 	} else {
-		loadAlbumArt();
+		loadAlbumArt(getAlbumArt());
 	}
 
 }
 
-function loadAlbumArt(image) {
+function getAlbumArt(image) {
 	var dataUrl = 'images/bg.jpg';
 	
 	if (image) {
@@ -68,10 +76,15 @@ function loadAlbumArt(image) {
 		dataUrl = "data:" + image.format + ";base64," + window.btoa(base64String);
 	}
 
-	setAlbumArt(dataUrl);
+	return dataUrl;
 }
 
 function setAlbumArt(url) {
+	if (url === currentAlbumArt) {
+		return;
+	}
+
+	currentAlbumArt = url;
 
 	diskContainer.style['background-image'] = 'url(\"' + url + '\")';
 	bg.style['background-image'] = 'url(\"' + url + '\")';
@@ -82,7 +95,6 @@ function setAlbumArt(url) {
 	link.rel = 'shortcut icon';
 	link.href = url;
 	document.getElementsByTagName('head')[0].appendChild(link);
-
 }
 
 function play(file) {
